@@ -1,0 +1,53 @@
+# Build
+build/
+out/
+bin/
+*.exe
+*.out
+*.app
+x64/
+x86/
+*.sln
+*.vcxproj*
+*.vcxproj.filters
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.code-workspace
+
+# Dependências
+deps/
+third_party/
+external/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+*.tmp
+
+# Configurações locais
+.local/
+.config/
+
+# Compilação
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+compile_commands.json
+*.cmake
+*.a
+*.so
+*.dylib
+*.lib
+*.dll
+
+# Pacotes instalados
+ambar_modules/
