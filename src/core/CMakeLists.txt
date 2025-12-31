@@ -5,7 +5,8 @@ add_library(amb_core STATIC
 )
 
 target_include_directories(amb_core PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../include
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/include
 )
 
 target_link_libraries(amb_core)
