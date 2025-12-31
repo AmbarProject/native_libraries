@@ -1,69 +1,35 @@
-# Biblioteca principal (core)
-add_library(amb_core STATIC
-    core/command.cpp
-    core/context.cpp
-    core/version.cpp
-    
-    utils/logger.cpp
-    utils/error.cpp
-    utils/filesystem.cpp
-    utils/string_utils.cpp
-    
-    config/config_manager.cpp
-)
+# src/CMakeLists.txt - VERSÃO CORRIGIDA
 
-# Executável principal
+# Subdiretórios
+add_subdirectory(core)
+add_subdirectory(cli)
+add_subdirectory(utils)
+add_subdirectory(commands)
+
+# Main executable
 add_executable(amb
     main.cpp
-    cli/cli_handler.cpp
-    cli/argument_parser.cpp
-    
-    commands/install_command.cpp
-    commands/remove_command.cpp
-    commands/list_command.cpp
-    commands/search_command.cpp
-    commands/publish_command.cpp
-    commands/update_command.cpp
-    commands/init_command.cpp
-    commands/help_command.cpp
 )
 
-# Link bibliotecas
-target_link_libraries(amb 
-    PRIVATE 
+target_include_directories(amb PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../include
+)
+
+target_link_libraries(amb
     amb_core
+    amb_cli
+    amb_utils
+    amb_commands
 )
 
-# Propaga includes
-target_include_directories(amb_core 
-    PUBLIC 
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
-    $<INSTALL_INTERFACE:include>
-)
+# Aplicar warnings APÓS criar o target
+if(COMMAND set_project_warnings)
+    set_project_warnings(amb)
+    set_project_warnings(amb_core)
+    set_project_warnings(amb_cli)
+    set_project_warnings(amb_utils)
+    set_project_warnings(amb_commands)
+endif()
 
-target_include_directories(amb
-    PRIVATE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
-)
-
-# Propriedades do target
-set_target_properties(amb PROPERTIES
-    OUTPUT_NAME "amb"
-    VERSION ${PROJECT_VERSION}
-    SOVERSION ${PROJECT_VERSION_MAJOR}
-)
-
-# Instalação (opcional)
-install(TARGETS amb
-    RUNTIME DESTINATION bin
-    BUNDLE DESTINATION bin
-)
-
-install(TARGETS amb_core
-    ARCHIVE DESTINATION lib
-    LIBRARY DESTINATION lib
-)
-
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../include/amb
-    DESTINATION include
-)
+# Install target
+install(TARGETS amb DESTINATION bin)

@@ -1,0 +1,39 @@
+name: Build on Windows
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Configure CMake
+      run: cmake -B build -DAMB_BUILD_TESTS=ON
+    
+    - name: Build
+      run: cmake --build build --config Release
+    
+    - name: Test
+      run: |
+        cd build
+        ctest --output-on-failure
+    
+    - name: Create release artifact
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      run: |
+        mkdir dist
+        copy build\Release\amb.exe dist\
+        7z a amb-windows-x64.zip .\dist\*
+    
+    - name: Upload artifact
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      uses: actions/upload-artifact@v3
+      with:
+        name: amb-windows
+        path: amb-windows-x64.zip

@@ -12,19 +12,19 @@ int main(int argc, char* argv[]) {
     using namespace amb;
     
     try {
-        // Inicializa logger
+        // Initialize logger first
         Logger::init();
-        Logger::info("Starting Ambar Package Manager v{}", 
+        Logger::info("Ambar Package Manager v{}", 
                      AMB_VERSION.toString());
         
-        // Cria e inicializa contexto
+        // Create and initialize context
         auto ctx = std::make_shared<Context>();
         if (!ctx->initialize()) {
             Logger::error("Failed to initialize context");
             return EXIT_FAILURE;
         }
         
-        // Processa linha de comando
+        // Parse command line
         CLIHandler cli(ctx);
         return cli.run(argc, argv);
         
@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
         Logger::error("Unexpected error: {}", e.what());
         return EXIT_FAILURE;
     } catch (...) {
-        Logger::error("Unknown error occurred");
+        Logger::error("Unknown fatal error");
         return EXIT_FAILURE;
     }
     
